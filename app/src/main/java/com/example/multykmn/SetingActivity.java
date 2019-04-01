@@ -23,6 +23,15 @@ public class SetingActivity extends AppCompatActivity {
 
     private ArrayList<String> moves = new ArrayList<>();
 
+    private boolean isSaved = true;
+
+
+
+    private final int gray = Color.parseColor("#aaaaaa");
+    private final int green = Color.parseColor("#00ff00");
+    private final int red = Color.parseColor("#ff0000");
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,17 +46,16 @@ public class SetingActivity extends AppCompatActivity {
     }
 
     private String readData() {
-        preferences = getPreferences(MODE_PRIVATE);
+        preferences = getSharedPreferences("Meta", MODE_PRIVATE);
         String movesText = preferences.getString("Moves", "");
         if(movesText.equals("")) {
             return addFirstData();
         }
         return movesText;
-
     }
 
     private String addFirstData(){
-        preferences = getPreferences(MODE_PRIVATE);
+        preferences =  getSharedPreferences("Meta", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         String stringMoves = "{Камень@@@@@Ножницы@@@@@Бумага}";
         editor.putString("Moves", stringMoves);
@@ -63,17 +71,14 @@ public class SetingActivity extends AppCompatActivity {
     private void addElements() {
         LinearLayout linearLayout = findViewById(R.id.LinealArea);
         for (int i = 0; i < moves.size(); i++) {
-            linearLayout.addView(addOneChild(moves.get(i), i));
+            linearLayout.addView(addOneChild(moves.get(i), i+2));
         }
-
     }
 
     private ConstraintLayout addOneChild(String text, int id) {
         ConstraintLayout constraintLayout = new ConstraintLayout(this);
-
-        constraintLayout.addView(addCheckBox(id));
-        constraintLayout.addView(addEditText(text, id));
-
+        constraintLayout.addView(addCheckBox(id), 0);
+        constraintLayout.addView(addEditText(text, id), 1);
         return constraintLayout;
     }
 
@@ -83,10 +88,9 @@ public class SetingActivity extends AppCompatActivity {
         ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
         );
-        layoutParams.setMargins(20, 0, 20,0);
+        layoutParams.setMargins(20, 0, 0,0);
         checkBox.setLayoutParams(layoutParams);
         checkBox.setButtonTintList(ColorStateList.valueOf(Color.WHITE));
-
         return checkBox;
     }
 
@@ -98,13 +102,15 @@ public class SetingActivity extends AppCompatActivity {
         ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
         );
-        layoutParams.setMargins(80, 0, 15,0);
+        editText.setOnLongClickListener(clickListener);
+        layoutParams.setMargins(80, 0, 20,0);
         editText.setLayoutParams(layoutParams);
         editText.setTextColor(Color.WHITE);
         return editText;
     }
 
     public void onAdd(View view) {
+        isSaved = false;
         LinearLayout linearLayout = findViewById(R.id.LinealArea);
         for (int i = 0; i < 2; i++) {
             linearLayout.addView(addOneChild("", moves.size()));
@@ -115,10 +121,10 @@ public class SetingActivity extends AppCompatActivity {
     public void onRemove(View view) {
         LinearLayout linearLayout = findViewById(R.id.LinealArea);
         int countNew = runByChilds(linearLayout, false);
-
         if (countNew <= 3 || countNew%2 == 0 || linearLayout.getChildCount()-countNew == 0) {
             Toast.makeText(this, "Выберите чётное кол-во > 3", Toast.LENGTH_LONG).show();
         } else {
+            isSaved = false;
             runByChilds(linearLayout, true);
         }
     }
@@ -142,6 +148,7 @@ public class SetingActivity extends AppCompatActivity {
     public void onSave(View view) {
         LinearLayout linearLayout = findViewById(R.id.LinealArea);
         if (saveChilds(linearLayout)) {
+            isSaved = true;
             Toast.makeText(this, "Сохранено", Toast.LENGTH_LONG).show();
             changeMoves();
         } else {
@@ -155,18 +162,15 @@ public class SetingActivity extends AppCompatActivity {
             ConstraintLayout constraintLayout = (ConstraintLayout)linearLayout.getChildAt(i);
             EditText editText = (EditText) constraintLayout.getChildAt(1);
             String currentText = editText.getText().toString();
-            if(currentText.equals("") || newMoves.contains(currentText)) {
-                return false;
-            } else {
-                newMoves.add(currentText);
-            }
+            if(currentText.equals("") || newMoves.contains(currentText)) return false;
+            else newMoves.add(currentText);
         }
         moves = newMoves;
         return true;
     }
 
     private void changeMoves(){
-        preferences = getPreferences(MODE_PRIVATE);
+        preferences = getSharedPreferences("Meta", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         String stringMoves = "{" + toStringArray(moves) + "}";
         editor.putString("Moves", stringMoves);
@@ -183,6 +187,38 @@ public class SetingActivity extends AppCompatActivity {
 
     public void onBack(View view){
         finish();
+    }
+
+
+    private View.OnLongClickListener clickListener = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View view) {
+            if(isSaved) {
+                int id = moves.indexOf(((EditText) view).getText().toString());
+                changeData(id);
+            } else {
+                Toast.makeText(SetingActivity.this, "Для начала, сохранись!", Toast.LENGTH_LONG).show();
+            }
+            return false;
+        }
+    };
+
+    private void changeData(int id) {
+        for (int i = 0; i < moves.size(); i++) {
+            int result = CalculatorResult.getInstance().getResult(id, i, moves.size());
+            switch (result) {
+                case 0: changeElements(i, gray); break;
+                case 1: changeElements(i, green); break;
+                case 2: changeElements(i, red); break;
+            }
+        }
+    }
+
+    public void changeElements(int id, int color){
+        LinearLayout linearLayout = findViewById(R.id.LinealArea);
+        ConstraintLayout constraintLayout = (ConstraintLayout)linearLayout.getChildAt(id+2);
+        EditText editText = (EditText) constraintLayout.getChildAt(1);
+        editText.setTextColor(color);
     }
 
 }
