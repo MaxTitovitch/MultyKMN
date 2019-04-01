@@ -72,7 +72,7 @@ public class GameActitity extends AppCompatActivity {
     private String addFirstData(){
         preferences = getSharedPreferences("Meta", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        String stringMoves = "{Камень@@@@@Ножницы@@@@@Бумага}";
+        String stringMoves = "{Stone@@@@@Scissors@@@@@Paper}";
         editor.putString("Moves", stringMoves);
         editor.commit();
         return stringMoves;

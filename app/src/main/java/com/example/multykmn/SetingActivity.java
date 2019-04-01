@@ -57,7 +57,7 @@ public class SetingActivity extends AppCompatActivity {
     private String addFirstData(){
         preferences =  getSharedPreferences("Meta", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        String stringMoves = "{Камень@@@@@Ножницы@@@@@Бумага}";
+        String stringMoves = "{Stone@@@@@Scissors@@@@@Paper}";
         editor.putString("Moves", stringMoves);
         editor.commit();
         return stringMoves;
@@ -103,7 +103,7 @@ public class SetingActivity extends AppCompatActivity {
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
         );
         editText.setOnLongClickListener(clickListener);
-        layoutParams.setMargins(80, 0, 20,0);
+        layoutParams.setMargins(120, 0, 20,0);
         editText.setLayoutParams(layoutParams);
         editText.setTextColor(Color.WHITE);
         return editText;
