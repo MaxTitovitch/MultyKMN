@@ -23,7 +23,7 @@
             android:layout_marginBottom="30dp"
             android:gravity="center"
             android:text="Multy KMN"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@android:color/darker_gray"
             android:textSize="40sp"
             android:textStyle="bold"
             app:fontFamily="monospace" />
