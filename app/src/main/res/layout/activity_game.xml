@@ -23,7 +23,7 @@
             android:layout_marginBottom="20dp"
             android:gravity="center"
             android:text="Выберите ход:"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="@color/colorPrimary"
             android:textSize="25sp"
             android:textStyle="bold"
             app:fontFamily="monospace" />
@@ -93,7 +93,7 @@
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
                 android:text="Проверить"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimary"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"

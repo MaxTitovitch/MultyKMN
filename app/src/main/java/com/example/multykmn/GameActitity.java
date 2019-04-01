@@ -95,14 +95,15 @@ public class GameActitity extends AppCompatActivity {
         RadioButton radioButton = new RadioButton(this);
         radioButton.setId(id);
         radioButton.setText(text);
-        radioButton.setTextColor(Color.parseColor("#aaaaaa"));
+        radioButton.setTextSize(20);
+        radioButton.setTextColor(Color.parseColor("#ffffff"));
         ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
         );
         layoutParams.setMargins(40, 0, 20,0);
         radioButton.setLayoutParams(layoutParams);
         if(id == 0) radioButton.setChecked(true);
-        radioButton.setButtonTintList(ColorStateList.valueOf(Color.WHITE));
+        radioButton.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#FF008577")));
         return radioButton;
     }
 

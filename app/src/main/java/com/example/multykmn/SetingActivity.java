@@ -90,7 +90,7 @@ public class SetingActivity extends AppCompatActivity {
         );
         layoutParams.setMargins(20, 0, 0,0);
         checkBox.setLayoutParams(layoutParams);
-        checkBox.setButtonTintList(ColorStateList.valueOf(Color.WHITE));
+        checkBox.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#FF008577")));
         return checkBox;
     }
 
