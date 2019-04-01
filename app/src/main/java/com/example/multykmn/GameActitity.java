@@ -85,6 +85,7 @@ public class GameActitity extends AppCompatActivity {
 
     private void addElements() {
         RadioGroup radioGroup = findViewById(R.id.MovesRadio);
+
         for (int i = 0; i < moves.size(); i++) {
             radioGroup.addView(addRadioBox(moves.get(i), i), i);
         }

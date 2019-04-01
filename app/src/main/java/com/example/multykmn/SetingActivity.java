@@ -77,6 +77,8 @@ public class SetingActivity extends AppCompatActivity {
 
     private ConstraintLayout addOneChild(String text, int id) {
         ConstraintLayout constraintLayout = new ConstraintLayout(this);
+        constraintLayout.setDescendantFocusability(ConstraintLayout.FOCUS_BEFORE_DESCENDANTS);
+        constraintLayout.setFocusableInTouchMode(true);
         constraintLayout.addView(addCheckBox(id), 0);
         constraintLayout.addView(addEditText(text, id), 1);
         return constraintLayout;
